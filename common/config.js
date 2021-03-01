@@ -2,7 +2,8 @@ const URL_API_ADMIN = 'https://tsunagun-fp-api.gonosen.work/api/admin';
 const URL_API = 'https://tsunagun-fp-api.gonosen.work/api';
 const SEPARATOR_URL = '/';
 const URL_API_LOGIN_ADMIN = URL_API_ADMIN + SEPARATOR_URL + 'login';
-
+const AWS_URL = 'https://s3awsgonosen.s3-ap-southeast-1.amazonaws.com/';
+const SERVER_URL = 'https://tsunagun-fp-api.gonosen.work/storage/';
 const URL_API_USER_LIST_ADMIN = URL_API_ADMIN + SEPARATOR_URL + 'users' + SEPARATOR_URL + 'listUser';
 const PAGE_SIZE = 20;
 
@@ -22,6 +23,8 @@ const DATETIME_JP = {
 };
 
 export {
+    AWS_URL,
+    SERVER_URL,
     URL_API_ADMIN,
     URL_API_LOGIN_ADMIN,
     URL_API_USER_LIST_ADMIN,

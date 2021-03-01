@@ -51,7 +51,7 @@
               <!--  Buttons -->
             <b-row class="mt-2 pb-3">
                 <b-col md="12" class="text-right pl-0">
-                    <b-button v-on:click="update" variant="outline-success" class="btn-submit">登録</b-button>
+                    <b-button v-on:click="update" variant="outline-success" class="btn-submit">投稿</b-button>
                     <NuxtLink to="/admin/admin-post">
                         <b-button class="btn-back" variant="outline-secondary">戻る</b-button>
                     </NuxtLink>
@@ -112,7 +112,7 @@ export default Vue.extend({
           if(data.code == 422)
             this.errors = data.error;
           else
-            return this.$router.push({ name: 'admin-admin-post', params:{success:"1"}});
+            return this.$router.push({ name: 'admin-admin-post', params:{update_success:"1"}});
         }
       );
 
@@ -163,15 +163,11 @@ export default Vue.extend({
         this.$store.dispatch('setPageData', {
             bread_crumbs: [
                 {
-                  text: "運営からのお知らせ 編集",
-                  to: "#"
-                },
-                {
                     text: "運営からのお知らせ",
                     to: "/admin/admin-post"
                 },
                 {
-                    text: "詳細",
+                    text: "編集",
                     to: "#"
                 }
             ],

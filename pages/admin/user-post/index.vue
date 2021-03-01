@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-alert variant="success" show v-if="$route.params.success == '1'">正常に保存されました。</b-alert>
-    <b-alert variant="success" show v-if="$route.params.success_remove == '1'">正常に削除されました。</b-alert>
+    <b-alert variant="success" show v-if="$route.params.success == '1' && updated_success">表示(非表示）に変更しました</b-alert>
+    <b-alert variant="success" show v-if="$route.params.success_remove == '1' || deleted_success">削除しました</b-alert>
     <div class="text-center" v-if="!loaded">
       <b-spinner variant="primary"></b-spinner>
     </div>
@@ -24,7 +24,7 @@
 
         <!-- User status history -->
         <b-col md="2" class="input-group-text no-border-radius-right mt-2">メンバーステータス</b-col>
-        <b-col md="4" class="p-0 no-border-radius-left">
+        <b-col md="3" class="pl-0 pt-1 no-border-radius-left">
             <b-form-checkbox-group
               class="mt-2 ml-2"
               id="radio-group-2"
@@ -171,10 +171,10 @@
 
         <template #cell(edit)="row">
           <NuxtLink :to="{name:'admin-user-post-detail-id', params:{id:row.item._id}}">
-                <b-button variant="outline-success" class="mr-1">
-                詳細
-                </b-button>
-              </NuxtLink>
+            <b-button variant="outline-success" class="mr-1">
+            詳細
+            </b-button>
+          </NuxtLink>
         </template>
 
         <template #cell(delete)="row">
@@ -204,13 +204,26 @@
 
 <script lang="ts">
 import Vue from 'vue'
+declare interface User {
+    created_at: string,
+    username: string,
+    birthday: any,
+    get_connect_areas:  Array < any >,
+    department: string,
+    status: number,
+    ID_validate: string,
+    get_certificates: Array < any > ,
+}
+
 declare interface UserPost {
   title : string,
   created_at:string,
   status:number,
   author:string,
   report_history:number,
-  area:string
+  area:string,
+  get_user: User,
+  _rowVariant: string
 }
 import { mapActions, mapGetters } from 'vuex'
 import adminMixin from "~/mixin/AdminMixin";
@@ -279,7 +292,9 @@ export default Vue.extend({
           date_end: '',
           orderName: '',
           orderType: false,
-          deleteId: ''
+          deleteId: '',
+          updated_success: true,
+          deleted_success: false
         };
     },
     layout: 'admin',
@@ -321,8 +336,11 @@ export default Vue.extend({
             objCondition: objCondition,
           };
           this.handleCrudAPIAdmin(objParam).then(data => {
-            if (data.ok == true)
+            if (data.ok == true) {
               this.fetchData()
+              this.updated_success = false;
+              this.deleted_success = true;
+            }
           });
       },
 
@@ -390,6 +408,11 @@ export default Vue.extend({
           };
           let dataResult = await this.handleCrudAPIAdmin(objPagram);
           this.items = Object.values(dataResult.data.data);
+          for(let post of this.items) {
+            if(post.get_user.status == 2) {
+              post._rowVariant = 'danger'
+            }
+          }
           this.totalPage = dataResult.data.last_page;
           this.loaded = true;
         }

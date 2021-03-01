@@ -69,7 +69,7 @@
             <!-- List image -->
             <b-row class="mt-2">
                 <b-col md="2" class="input-group-text no-border-radius-right">画像</b-col>
-                <b-col md="10">
+                <b-col md="10" class="border-form">
                     <b-row>
                         <b-col md="4" v-for="image in images" :key="image._id" class="border-secondary">
                             <b-card
@@ -91,7 +91,7 @@
             <!-- Repost history -->
             <b-row class="mt-2">
                 <b-col md="2" class="input-group-text no-border-radius-right">通報履歴</b-col>
-                <b-col md="10" >
+                <b-col md="10" class="border-form">
                   <p v-for="report in reportHistory" :key="report._id">{{formatDate(report.created_at)}} {{report.reason}}</p>
                 </b-col>
             </b-row>
@@ -222,10 +222,6 @@ export default Vue.extend({
   created() {
       this.$store.dispatch('setPageData', {
             bread_crumbs: [
-              {
-                text: "自由投稿管理 詳細",
-                to: '#'
-              },
               {
                   text: "自由投稿管理",
                   to: "/admin/user-post"

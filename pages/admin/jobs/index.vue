@@ -1,5 +1,8 @@
 <template>
   <div>
+    <b-alert variant="success" show v-if="$route.params.success == '1' && updated_success">表示(非表示）に変更しました</b-alert>
+    <b-alert variant="success" show v-if="$route.params.success_remove == '1' || deleted_success">削除しました</b-alert>
+    
     <b-container class="mt-2" fluid>
       
       <b-row class="mt-2">
@@ -190,7 +193,7 @@
         <paginate v-model="pageCurrent" v-if="renderPaginateComponent" :page-count="totalPage" :click-handler="clickCallbackPagination" :prev-text="'<'" :next-text="'>'" :container-class="'pagination pb-3'"> </paginate>
     </div>
     
-    <b-modal id="delete-model" @ok="deleteJob">削除してもよろしいでしょうか。</b-modal>
+    <b-modal id="delete-model" @ok="deleteJob" cancel-title="キャンセル">削除してもよろしいでしょうか。</b-modal>
   </div>
 </template>
 
@@ -292,7 +295,11 @@
         loaded: false,
         searchButtonStatus: false,
         deleteId: '',
-        datetime_option: DATETIME_JP
+        datetime_option: DATETIME_JP,
+        orderName: '',
+        orderType: false,
+        updated_success: true,
+        deleted_success: false
       };
     },
     layout: 'admin',
@@ -389,11 +396,14 @@
                     objCondition: objCondition
                 };
                 let dataResult = await this.handleCrudAPIAdmin(objPagram);
-                console.log(dataResult);
                 this.jobs = dataResult.data.data;
                 this.totalPage = dataResult.data.last_page;
                 this.totalPage = dataResult.data.last_page;
                 this.loaded = true;
+                if(typeof objCondition.delete_id != 'undefined') {
+                  this.updated_success = false;
+                  this.deleted_success = true;
+                }
             }
         },
         

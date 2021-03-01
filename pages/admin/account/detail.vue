@@ -105,11 +105,11 @@ export default Vue.extend({
                     to: "/admin/account"
                 },
                 {
-                    text: "詳細",
+                    text: "編集",
                     to: "#"
                 }
             ],
-            title: "ログインID/PW 管理",
+            title: "ログインID/PW 編集",
             sidebar: 'account'
         });
     },

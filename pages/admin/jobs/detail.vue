@@ -3,9 +3,9 @@
     <b-container class="mt-2" fluid>
 
           <b-row class="mt-2">
-            <b-col md="4" class="input-group-text no-border-radius-right">投稿年月日</b-col>
+            <b-col md="2" class="input-group-text no-border-radius-right">投稿年月日</b-col>
   
-            <b-col md="8" class="p-0 no-border-radius-left">
+            <b-col md="9" class="p-0 no-border-radius-left">
                <b-form-datepicker 
                 id="example-datepicker" 
                 v-model="data.created_at" 
@@ -18,9 +18,9 @@
           
           <b-row class="mt-2">
             <!-- date_start input -->
-            <b-col md="4" class="input-group-text no-border-radius-right">募集期間</b-col>
+            <b-col md="2" class="input-group-text no-border-radius-right">募集期間</b-col>
             
-            <b-col md="3" class="p-0 no-border-radius-left">
+            <b-col md="4" class="p-0 no-border-radius-left">
               <b-form-datepicker 
                 id="example-datepicker" 
                 v-model="data.recruiting_start" 
@@ -32,12 +32,12 @@
             </b-col>
             <!-- end date_start input -->
             
-            <b-col md="2" class="no-border-radius-right text-center">
+            <b-col md="1" class="no-border-radius-right text-center">
               <i class="fas fa-arrow-right"></i>
             </b-col>
             
             <!-- date_end input -->
-            <b-col md="3" class="p-0 no-border-radius-left">
+            <b-col md="4" class="p-0 no-border-radius-left">
               <b-form-datepicker 
                 id="example-datepicker" 
                 v-model="data.recruiting_end" 
@@ -52,8 +52,8 @@
 
           <!-- Status input -->
           <b-row class="mt-2">
-            <b-col md="4" class="input-group-text no-border-radius-right">ステータス</b-col>
-            <b-col md="8" class="p-0 no-border-radius-left">
+            <b-col md="2" class="input-group-text no-border-radius-right">ステータス</b-col>
+            <b-col md="9" class="p-0 no-border-radius-left border-form">
               <b-form-radio-group
                 class="mt-2 ml-2"
                 id="radio-group-1"
@@ -66,28 +66,28 @@
           <!-- End Status input -->
 
           <b-row class="mt-2">
-            <b-col md="4" class="input-group-text no-border-radius-right">投稿者</b-col>
-            <b-col md="8" class="no-border-radius-left input-group-text height-initial">
+            <b-col md="2" class="input-group-text no-border-radius-right">投稿者</b-col>
+            <b-col md="9" class="no-border-radius-left input-group-text height-initial">
                {{userText(data.get_user)}}
             </b-col>
           </b-row>
 
           <b-row class="mt-2">
-            <b-col md="4" class="input-group-text no-border-radius-right">カテゴリ</b-col>
-            <b-col md="8" class="no-border-radius-left input-group-text height-initial">
+            <b-col md="2" class="input-group-text no-border-radius-right">カテゴリ</b-col>
+            <b-col md="9" class="no-border-radius-left input-group-text height-initial">
               {{skillText(data.get_skills)}}
             </b-col>
           </b-row>
           <b-row class="mt-2">
-            <b-col md="4" class="input-group-text no-border-radius-right">エリア</b-col>
-            <b-col md="8" class="no-border-radius-left input-group-text height-initial">
+            <b-col md="2" class="input-group-text no-border-radius-right">エリア</b-col>
+            <b-col md="9" class="no-border-radius-left input-group-text height-initial">
               {{areaText(data.get_connect_areas)}}
             </b-col>
           </b-row>
 
           <b-row class="mt-2">
-            <b-col md="4" class="input-group-text no-border-radius-right">タイトル</b-col>
-            <b-col md="8" class="p-0 no-border-radius-left">
+            <b-col md="2" class="input-group-text no-border-radius-right">タイトル</b-col>
+            <b-col md="9" class="p-0 no-border-radius-left">
               <b-form-input
                 v-model="data.title"
                 readonly
@@ -97,15 +97,15 @@
           </b-row>
 
           <b-row class="mt-2">
-            <b-col md="4" class="input-group-text no-border-radius-right">本文</b-col>
-            <b-col md="8" class="p-0 no-border-radius-left">
+            <b-col md="2" class="input-group-text no-border-radius-right">本文</b-col>
+            <b-col md="9" class="p-0 no-border-radius-left">
               <b-form-input class="no-border-radius-left" readonly v-model="data.content"></b-form-input>
             </b-col>
           </b-row>
 
           <b-row class="mt-2">
-            <b-col md="4" class="input-group-text no-border-radius-right">通報履歴</b-col>
-            <b-col md="8" class="no-border-radius-left input-group-text height-initial">
+            <b-col md="2" class="input-group-text no-border-radius-right">通報履歴</b-col>
+            <b-col md="9" class="no-border-radius-left input-group-text height-initial">
               <p class="white-space-normal" v-for="report in data.get_reports" :key="report._id">
                 <strong>{{formatDate(report.created_at)}}</strong> - {{report.reason}}
               </p>
@@ -120,7 +120,7 @@
           <b-button href="#" variant="outline-success" class="btn-submit" v-on:click="update">更新</b-button>
           <b-button href="#" variant="outline-danger" v-b-modal.delete-model>削除</b-button>
         </b-col>
-        <b-col md="6" class="text-right">
+        <b-col md="5" class="text-right">
           <NuxtLink to="/admin/jobs">
             <b-button variant="outline-secondary">一覧へ戻る</b-button>
           </NuxtLink>
@@ -201,10 +201,6 @@
         this.$store.dispatch('setPageData', {
             bread_crumbs: [
               {
-                text: "お仕事依頼リスト管理 詳細",
-                to: '#'
-              },
-              {
                   text: "お仕事依頼管理",
                   to: "/admin/jobs"
               },
@@ -276,9 +272,7 @@
           };
           this.handleCrudAPIAdmin(objParam).then(data=>{
             if(data.ok == true)
-              return this.$router.push({
-                path:'/admin/jobs'
-              })
+              return this.$router.push({ name: 'admin-jobs', params:{success:"1"}});
           });
         },
         
@@ -292,9 +286,7 @@
           };
           this.handleCrudAPIAdmin(objParam).then(data=>{
             if(data.ok == true)
-            return this.$router.push({
-              path:'/admin/jobs'
-            })
+            return this.$router.push({ name: 'admin-jobs', params:{success_remove:"1"}});
           });
         }
     },

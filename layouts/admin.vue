@@ -108,6 +108,9 @@ export default Vue.extend({
     },
     methods: {
     },
+    created() {
+        console.log("ok");
+    },
 })
 </script>
 

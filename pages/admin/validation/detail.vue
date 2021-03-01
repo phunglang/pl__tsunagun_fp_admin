@@ -41,7 +41,7 @@
                                                 v-for="image in user.get_id_images" 
                                                 :key="image._id" 
                                                 thumbnail fluid 
-                                                v-bind:src="image.path" 
+                                                v-bind:src="mapAWS_URL(image.path)" 
                                                 v-on:click="zoomImage(image.path)"
                                                 alt="Image 1"
                                             ></b-img>
@@ -86,7 +86,7 @@
                                                 v-for="image in skill.get_images" 
                                                 :key="image._id" 
                                                 thumbnail fluid 
-                                                v-bind:src="image.path" 
+                                                v-bind:src="mapAWS_URL(image.path)" 
                                                 alt="Image 1"
                                                 v-on:click="$bvModal.show('bv-image-modal')"
                                             >
@@ -123,7 +123,7 @@
             <b-img 
                 class="w-100"
                 thumbnail fluid 
-                v-bind:src="zoomImageSrc" 
+                v-bind:src="mapAWS_URL(zoomImageSrc)" 
             ></b-img>
         </b-modal>
     </div>
@@ -132,6 +132,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
+import { AWS_URL } from "~/common/config";
 export default Vue.extend({
     data() {
         return {
@@ -215,7 +216,11 @@ export default Vue.extend({
         zoomImage(path:string) {
             this.zoomImageSrc = path;
             this.modalShow = true;
-        }
+        },
+        
+        mapAWS_URL: function(url: string) {
+            return AWS_URL + url;
+        },
     },
     created() {
         let page = this.$route.query.page || '';
@@ -226,7 +231,7 @@ export default Vue.extend({
                     to: page == 'id-card' ? "/admin/validation/id-card" : "/admin/validation/skills"
                 },
                 {
-                    text: "詳細",
+                    text: "確認",
                     to: "#"
                 }
             ],

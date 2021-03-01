@@ -28,7 +28,7 @@
                     <!-- Status input -->
                     <b-row class="mt-2">
                         <b-col md="4" class="input-group-text no-border-radius-right">ステータス</b-col>
-                        <b-col md="8" class="p-0 no-border-radius-left">
+                        <b-col md="8" class="p-0 no-border-radius-left border-form">
                             <b-form-radio-group
                                 class="mt-2 ml-2"
                                 id="radio-group-1"
@@ -53,7 +53,7 @@
                     <b-row class="mt-2">
                         <b-col md="4" class="input-group-text no-border-radius-right">パスワード</b-col>
                         <b-col md="8" class="p-0 no-border-radius-left">
-                           <b-form-input class="no-border-radius-left" type="password" disabled>12345678</b-form-input>
+                           <b-form-input class="no-border-radius-left" type="password" disabled v-model="defaultPassword"></b-form-input>
                         </b-col>
                     </b-row>
                     <!-- End Password input -->
@@ -70,14 +70,14 @@
                     <!-- Skills input -->
                     <b-row class="mt-2">
                         <b-col md="4" class="input-group-text no-border-radius-right">スキル/資格</b-col>
-                        <b-col md="8" class="no-border-radius-left input-group-text height-initial">
+                        <b-col md="8" class="no-border-radius-left input-group-text height-initial d-block">
                             <div class="ml-2" size="sm" 
-                                v-for="(skill, index) in user.get_certificates" 
+                                v-for="(skill) in user.get_certificates" 
                                 :key="skill._id" 
                                 pill 
                                 :variant="getSkillButton(skill.status)"
                             >
-                                {{index != 0 ? ', ' : ''}}{{skill.get_skill.name}}
+                                {{skill.get_skill.name}}
                                 <i class="fas fa-check-square" v-if="skill.status == 1"></i>
                             </div>
                         </b-col>
@@ -139,7 +139,7 @@
                     <!-- Website input -->
                     <b-row class="mt-2">
                         <b-col md="4" class="input-group-text no-border-radius-right">ウェブサイト</b-col>
-                        <b-col md="8" class="p-0 no-border-radius-left">    
+                        <b-col md="8" class="p-0 no-border-radius-left border-form">    
                             <b-button class="ml-2" size="sm" 
                                 v-for="website in user.websites" 
                                 :key="website" 
@@ -160,7 +160,7 @@
                             <template #prepend>
                             <b-input-group-text >プロフィール画像</b-input-group-text>
                             </template>
-                            <b-img thumbnail fluid :src="user.avatar" alt="Image 1"></b-img>
+                            <b-img thumbnail fluid :src="mapSERVER_URL(user.avatar)" width="200" alt="Image 1"></b-img>
                         </b-input-group>
                     </div>
                     <!-- End Avatar input -->
@@ -173,8 +173,8 @@
             <!-- CMND input -->
             <b-row class="mt-2">
                 <b-col md="2" class="input-group-text no-border-radius-right">本人確認書類</b-col>
-                <b-col md="8" class="p-3 no-border-radius-left">
-                    <b-img class="mb-2" v-for="image in user.get_id_images" :key="image._id" thumbnail fluid v-bind:src="image.path" alt="Image 1"></b-img>
+                <b-col md="10" class="p-3 no-border-radius-left border-form">
+                    <b-img class="mb-2" v-for="image in user.get_id_images" :key="image._id" thumbnail fluid v-bind:src="mapAWS_URL(image.path)" alt="Image 1"></b-img>
                         <b-form-group v-slot="{ ariaDescribedby }">
                             <b-form-radio-group
                                 :id="'radio-validate-id-card-' + user._id"
@@ -192,11 +192,11 @@
                     
             <b-row class="mt-2">
                 <b-col md="2" class="input-group-text no-border-radius-right">資格書類</b-col>
-                <b-col md="10">
+                <b-col md="10" class="border-form">
 
                     <b-row>
-                        <b-col md="4" v-for="skill in user.get_certificates" :key="skill.id" class="border-secondary">
-                            <b-img v-for="image in skill.get_images" :key="image._id" thumbnail fluid v-bind:src="image.path" alt="Image 1"></b-img>
+                        <b-col md="4" v-for="skill in user.get_certificates" :key="skill.id" class="border-secondary p-3">
+                            <b-img v-for="image in skill.get_images" :key="image._id" thumbnail fluid v-bind:src="mapAWS_URL(image.path)" alt="Image 1"></b-img>
                             <b-form-group v-slot="{ ariaDescribedby }">
                                 <b-form-radio-group
                                     :id="'radio-validate-skill-' + skill._id"
@@ -241,7 +241,7 @@
             <!--  Remarks -->
             <b-row class="mt-2">
                 <b-col md="2" class="input-group-text no-border-radius-right">備考</b-col>
-                <b-col md="10">
+                <b-col md="10" class="p-0">
                     <textarea maxlength="10000" v-model="user.note" rows="10" cols="50" class="form-control" style="resize: none; overflow-y: scroll; height: 150px;">
                     </textarea>
                 </b-col>
@@ -251,7 +251,7 @@
             <!--  Report history -->
             <b-row class="mt-2">
                 <b-col md="2" class="input-group-text no-border-radius-right">通報履歴</b-col>
-                <b-col md="10">
+                <b-col md="10" class="border-form">
                     <p v-for="report in user.get_user_reports" :key="report._id">{{formatDate(report.created_at)}} {{report.reason}}</p>
                 </b-col>
             </b-row>
@@ -280,6 +280,7 @@
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import adminMixin from "~/mixin/AdminMixin";
+import { AWS_URL, SERVER_URL } from "~/common/config";
 declare interface Skill {
     _id: string,
     name: string,
@@ -332,7 +333,8 @@ export default Vue.extend({
             ],
             loaded: false,
             user: {} as User,
-            userArea: ''
+            userArea: '',
+            defaultPassword: '12345678'
         };
     },
     layout: 'admin',
@@ -447,6 +449,14 @@ export default Vue.extend({
                     return 'その他';
             }   
         },
+        
+        mapAWS_URL: function(url: string) {
+            return AWS_URL + url;
+        },
+        
+        mapSERVER_URL: function(url: string) {
+            return SERVER_URL + url;
+        }
     },
     created() {
         this.$store.dispatch('setPageData', {

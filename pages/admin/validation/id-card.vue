@@ -112,7 +112,7 @@
             <template #cell(_id)="row">
                 <NuxtLink :to="{path: urlDetail, query: {users: [row.value], page: 'id-card'}}">
                     <b-button variant="outline-success" class="mr-1">
-                    詳細
+                    確認
                     </b-button>
                 </NuxtLink>
             </template>

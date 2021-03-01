@@ -9,7 +9,7 @@
                 </b-col>
                 <b-col md="1" class="p-0"> 
                     <NuxtLink to="/admin/account/detail">
-                        <b-button variant="outline-success" class="h-100 w-100">投稿</b-button>
+                        <b-button variant="outline-success" class="h-100 w-100">編集</b-button>
                     </NuxtLink>
                 </b-col>
             </b-row>
@@ -59,7 +59,7 @@ export default Vue.extend({
                     to: "#"
                 }
             ],
-            title: "ログインID/PW 管理",
+            title: "ログインID/PW 詳細",
             sidebar: 'account'
         });
     },

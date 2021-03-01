@@ -1,7 +1,7 @@
 <template>
 <div>
     <b-container class="mt-2" fluid>
-        <b-alert variant="success" show v-if="$route.params.success == '1'">正常に保存されました。</b-alert>
+        <b-alert variant="success" show v-if="$route.params.success == '1'">情報を更新しました</b-alert>
          
         <!-- Username input -->
         <b-row class="mt-2">

@@ -118,7 +118,7 @@
             <template #cell(_id)="row">
                 <NuxtLink :to="{path: url_detail, query: {users: [row.value], page: 'skills'}}">
                     <b-button variant="outline-success" class="mr-1">
-                    詳細
+                    確認
                     </b-button>
                 </NuxtLink>
             </template>

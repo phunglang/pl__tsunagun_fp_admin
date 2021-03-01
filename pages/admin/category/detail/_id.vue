@@ -96,7 +96,7 @@ update() {
       //   name:'admin-category'
       // })
       
-      return this.$router.push({ name: 'admin-category', params:{success:"1"}});
+      return this.$router.push({ name: 'admin-category', params:{update_success:"1"}});
       });
 
 },
@@ -105,15 +105,11 @@ update() {
         this.$store.dispatch('setPageData', {
             bread_crumbs: [
                 {
-                  text: "スキル 資格編集",
-                  to: '#'
-                },
-                {
-                    text: "スキル",
+                    text: "スキル/資格マスタ",
                     to: "/admin/category"
                 },
                 {
-                    text: "詳細",
+                    text: "編集",
                     to: "#"
                 }
             ],

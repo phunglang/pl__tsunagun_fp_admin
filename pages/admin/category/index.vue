@@ -1,6 +1,8 @@
 <template>
     <div>
-        <b-alert variant="success" show v-if="$route.params.success == '1'">正常に保存されました。</b-alert>
+        <b-alert variant="success" show v-if="$route.params.success == '1' && updated_success">スキル/資格が新規登録されました</b-alert>
+        <b-alert variant="success" show v-if="$route.params.update_success == '1' && updated_success">スキル/資格を編集しました</b-alert>
+        <b-alert variant="success" show v-if="$route.params.success_remove == '1' || deleted_success">削除しました</b-alert>
         <div class="text-center" v-if="!loaded">
           <b-spinner variant="primary"></b-spinner>
         </div>
@@ -78,7 +80,7 @@
               <template #cell(edit)="row">
                   <NuxtLink :to="{name:'admin-category-detail-id', params:{id:row.item._id}}">
                       <b-button variant="outline-success" class="mr-1">
-                      詳細
+                      編集
                       </b-button>
                   </NuxtLink>
               </template>
@@ -138,7 +140,7 @@ export default Vue.extend({
                 { key: 'selected', label: '全選択' },
                 { key: 'name', label: 'スキル/資格', class: 'text-center' },
                 { key: 'status', label: 'ステータス'},
-                { key: 'edit', label: '詳細' },
+                { key: 'edit', label: '編集' },
                 { key: 'delete', label: '削除' }
             ],
           data : [],
@@ -147,7 +149,9 @@ export default Vue.extend({
           sortBy: '',
           sortDesc: false,
           sortDirection: 'asc',
-          delete_id: ''
+          delete_id: '',
+          updated_success: true,
+          deleted_success: false
         };
     },
     layout: 'admin',
@@ -217,7 +221,9 @@ export default Vue.extend({
         };
         this.handleCrudAPIAdmin(objParam).then(data => {
           if (data.ok == true)
-            this.fetchData()
+            this.fetchData();
+            this.updated_success = false;
+            this.deleted_success = true;
         });
       },
 
@@ -239,8 +245,11 @@ export default Vue.extend({
             objCondition:objCondition ,
           };
           this.handleCrudAPIAdmin(objParam).then(data => {
-            if(data.ok == true)
+            if(data.ok == true) {
               this.fetchData()
+              this.updated_success = false;
+              this.deleted_success = true;
+            }
         });
 
       },

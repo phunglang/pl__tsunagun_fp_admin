@@ -54,16 +54,6 @@
                         </template>
                     </b-form-tags>
                 </b-col>
-
-
-                <!--  Buttons -->
-                <b-row class="mt-2 pb-3">
-                    <b-col md="6" class="text-left">
-                        <b-button href="#" variant="outline-success"
-                                  v-on:click="add" class="btn-submit">更新</b-button>
-                    </b-col>
-                </b-row>
-                <!-- End Buttons -->
             </b-row>
         </b-container>
 
@@ -120,23 +110,15 @@ export default Vue.extend({
         if(addIndex != -1) {
           this.addTags.splice(addIndex, 1);
         }
+        this.update_data('', tag);
       },
       addTag() {
         let tag = this.inputTag;
         let addIndex = this.addTags.indexOf(tag);
         if (addIndex == -1) {
-        this.addTags.push(tag);
-        this.inputTag = '';
-          let removeIndex = this.removeTags.indexOf(tag);
-          let index = this.ngWords.indexOf(tag);
-          if(index == -1) {
-            this.ngWords.push(tag);
-          }
-          if(removeIndex != -1) {
-            this.removeTags.splice(removeIndex, 1);
-          }
-      }
-
+          this.update_data(tag, '');
+          this.addTags.push(tag);
+        }
       },
       onTagState(valid:string[], invalid:string[], duplicate:string) {
         this.validTags = valid,
@@ -144,38 +126,32 @@ export default Vue.extend({
         this.duplicateTags = duplicate
       },
 
-      add() {
-        console.log(this.removeTags);
-        console.log(this.addTags);
-      let objCondition = {
-         tagAdd:this.addTags,
-        tagRemove:this.removeTags
+      update_data(listAdd: string, listRemove: string) {
+          let objCondition = {
+            tagAdd: listAdd.length == 0 ? [] : [listAdd],
+            tagRemove:listRemove.length == 0 ? [] : [listRemove]
+          };
+          let objPagram = {
+            method: "post",
+            urlAPi: "/ng-word/update",
+            objCondition: objCondition
+          };
+          this.handleCrudAPIAdmin(objPagram).then(data => {
+            this.dismissCountDown = this.dismissSecs
 
-       };
-         let objPagram = {
-           method: "post",
-           urlAPi: "/ng-word/update",
-           objCondition: objCondition
-         };
-         this.handleCrudAPIAdmin(objPagram).then(data => {
-           this.dismissCountDown = this.dismissSecs
-
-           if(data.code == 422) {
-             this.messages = data.error;
-             this.alertvariant='danger';
-           }
-           else
-           {
-             this.alertvariant='success';
-             this.messages=data.data.message;
-             this.addTags =[];
-             this.removeTags=[];
-             this.fetchData();
-           }
-         });
-
-
-
+            if(data.code == 422) {
+              this.messages = data.error;
+              this.alertvariant='danger';
+            }
+            else
+            {
+              this.alertvariant='success';
+              this.messages=data.data.message;
+              this.addTags =[];
+              this.removeTags=[];
+              this.fetchData();
+            }
+          });
       },
       async fetchData(objCondition: any = {}) {
         const accessToken = this.getTokens.accessToken;

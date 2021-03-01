@@ -1,6 +1,8 @@
 <template>
     <div>
-      <b-alert variant="success" show v-if="$route.params.success == '1'">正常に保存されました。</b-alert>
+      <b-alert variant="success" show v-if="$route.params.success == '1' && updated_success">運営からのお知らせが新規登録されました</b-alert>
+      <b-alert variant="success" show v-if="$route.params.update_success == '1' && updated_success">運営からのお知らせを編集しました</b-alert>
+      <b-alert variant="success" show v-if="$route.params.success_remove == '1' || deleted_success">削除しました</b-alert>
       <div class="text-center" v-if="!loaded">
         <b-spinner variant="primary"></b-spinner>
       </div>
@@ -51,7 +53,7 @@
           <template #cell(edit)="row">
             <NuxtLink :to="{name:'admin-admin-post-detail-id', params:{id:row.item._id}}">
                   <b-button variant="outline-success" class="mr-1">
-                  詳細
+                  編集
                   </b-button>
               </NuxtLink>
           </template>
@@ -107,13 +109,15 @@ export default Vue.extend({
           fields: [
             { key: 'publish_date', label: '投稿年月日'},
             { key: 'title', label: 'タイトル'},
-            { key: 'edit', label: '詳細' },
+            { key: 'edit', label: '編集' },
             { key: 'delete', label: '削除' }
           ],
           renderPaginateComponent: true,
           orderName: '',
           orderType: false,
-          deleteId: ''
+          deleteId: '',
+          updated_success: true,
+          deleted_success: false
         };
     },
     layout: 'admin',
@@ -146,8 +150,11 @@ export default Vue.extend({
           objCondition: objCondition,
         };
         this.handleCrudAPIAdmin(objParam).then(data => {
-          if (data.ok == true)
+          if (data.ok == true) {
             this.fetchData()
+            this.updated_success = false;
+            this.deleted_success = true;
+          }
         });
       },
 
